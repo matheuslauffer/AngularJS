@@ -2,9 +2,15 @@ angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function($sc
   $scope.app = "Lista Telefônica";
   $scope.contatos = [];
   $scope.operadoras = [];
+  $scope.contato = {};  
   var carregarContatos = function(){
-    contatosAPI.getContatos().then(function(res){
-      $scope.contatos = res.data;
+    contatosAPI.getContatos().then(function(data){
+      data.forEach(function(item){
+        item.serial = serialGenerator.generate();
+      });
+      $scope.contatos = data;
+    }).catch(function(data, status){
+        $scope.error = "Não foi possível carregar os dados!";
     });
   };
   var carregarOperadoras = function(){
